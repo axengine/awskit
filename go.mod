@@ -1,4 +1,4 @@
-module awskit
+module github.com/axengine/awskit
 
 go 1.17
 
