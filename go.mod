@@ -8,6 +8,7 @@ require (
 	github.com/aws/aws-sdk-go-v2/service/s3 v1.30.5
 	github.com/aws/aws-sdk-go-v2/service/ses v1.15.3
 	github.com/aws/aws-sdk-go-v2/service/sns v1.20.4
+	github.com/google/uuid v1.3.0
 	github.com/pkg/errors v0.9.1
 )
 

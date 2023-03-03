@@ -33,3 +33,11 @@ func (ak *AWSKit) UploadBuf(bucketName string, objectKey string, buf []byte, siz
 	})
 	return err
 }
+
+func (ak *AWSKit) DeleteOBJ(bucketName string, objectKey string) error {
+	_, err := ak.s3Client.DeleteObject(context.TODO(), &s3.DeleteObjectInput{
+		Bucket: aws.String(bucketName),
+		Key:    aws.String(objectKey),
+	})
+	return err
+}

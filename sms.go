@@ -11,11 +11,11 @@ import (
 
 const (
 	// SenderIDSMSAttribute a custom name that's displayed as the message sender on the receiving device.
-	SenderIDSMSAttribute = "SenderID"
+	SenderIDSMSAttribute = "AWS.SNS.SMS.SenderID"
 	// MaxPriceSMSAttribute a maximum price in USD that you are willing to pay to send the message.
-	MaxPriceSMSAttribute = "MaxPrice"
+	MaxPriceSMSAttribute = "AWS.SNS.SMS.MaxPrice"
 	// MessageTypeSMSAttribute a SMS type, can be either Promotional or Transactional.
-	MessageTypeSMSAttribute = "MessageType"
+	MessageTypeSMSAttribute = "AWS.SNS.SMS.MessageType"
 
 	// Promotional message type used for promotional purposes that are noncritical, won't be delivered
 	// to DND (Do Not Disturb) numbers.
@@ -82,13 +82,21 @@ func (sm *SMSMsg) attribute() map[string]types.MessageAttributeValue {
 
 // SendSMS message to the given message to the receiver mobile phone number
 func (ak *AWSKit) SendSMS(ctx context.Context, msg *SMSMsg) (*string, error) {
+	out, err := ak.snsClient.SetSMSAttributes(context.Background(), &sns.SetSMSAttributesInput{
+		Attributes: map[string]string{"DefaultSMSType": "Transactional"},
+	})
+	if err != nil {
+		return nil, errors.Wrap(err, "SetSMSAttributes")
+	}
+	fmt.Println(out.ResultMetadata)
 	if !msg.MessageType.IsValid() {
 		return nil, errors.New("invalid msg type")
 	}
 	params := &sns.PublishInput{
-		Message:           aws.String(msg.Content),
-		PhoneNumber:       aws.String(msg.Recipient),
-		MessageAttributes: msg.attribute(),
+		Message:     aws.String(msg.Content),
+		PhoneNumber: aws.String(msg.Recipient),
+
+		//MessageAttributes: msg.attribute(),
 	}
 	resp, err := ak.snsClient.Publish(ctx, params)
 	if err != nil {
