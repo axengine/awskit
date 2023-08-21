@@ -7,7 +7,7 @@ import (
 )
 
 func TestAWSKit_SendEMail(t *testing.T) {
-	cli, err := New()
+	cli, err := New("default", "ap-northeast-1")
 	if err != nil {
 		t.Fatal(err)
 	}

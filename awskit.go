@@ -14,8 +14,13 @@ type AWSKit struct {
 	snsClient *sns.Client
 }
 
-func New() (*AWSKit, error) {
-	sdkConfig, err := config.LoadDefaultConfig(context.TODO())
+// New ASWKit
+// profile:credentials profile in .aws dir
+// region
+func New(profile, region string) (*AWSKit, error) {
+	sdkConfig, err := config.LoadDefaultConfig(context.TODO(),
+		config.WithSharedConfigProfile(profile),
+		config.WithRegion(region))
 	if err != nil {
 		return nil, err
 	}
